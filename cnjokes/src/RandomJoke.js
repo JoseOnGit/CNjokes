@@ -4,8 +4,8 @@ const CHUCK_API = 'https://api.chucknorris.io/';
 const RANDOM_JOKE_QUERY = 'jokes/random';
 
 class RandomJoke extends Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
 
         this.state = {
             joke: null,
@@ -13,7 +13,7 @@ class RandomJoke extends Component {
     }
 
     getRandomJoke = () => {
-        fetch(CHUCK_API + RANDOM_JOKE_QUERY)
+        fetch(`${CHUCK_API}${RANDOM_JOKE_QUERY}`)
             .then(response => response.json())
             .then(data => this.setState({joke: data.value}))
     };
@@ -25,11 +25,11 @@ class RandomJoke extends Component {
 
 
     render() {
-        const { joke } = this.state;
+        const {joke} = this.state;
 
         return (
-            <div id="chuckWrap">
-                <div id="chuckHeader"></div>
+            <div className="chuckWrap">
+                <div className="chuckHeader" />
                 <button onClick={this.getRandomJoke}>Get a random joke</button>
                 <div>{joke}</div>
             </div>
