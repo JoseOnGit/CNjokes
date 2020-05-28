@@ -1,11 +1,12 @@
-import React, { Component } from "react";
-import "../App.css";
+import React, { Component } from 'react';
+import '../App.css';
 
 class Card extends Component {
   render() {
+    const { id, joke } = this.props;
     return (
-      <div className="card" id={this.props.id}>
-        <p className="text">{this.props.joke}</p>
+      <div className="card" id={id}>
+        <p className="text">{joke}</p>
       </div>
     );
   }

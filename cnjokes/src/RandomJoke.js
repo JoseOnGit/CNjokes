@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import Card from "./components/Card";
+import React, { Component } from 'react';
+import Card from './components/Card';
 
-const CHUCK_API = "https://api.chucknorris.io/";
-const RANDOM_JOKE_QUERY = "jokes/random";
+const CHUCK_API = 'https://api.chucknorris.io/';
+const RANDOM_JOKE_QUERY = 'jokes/random';
 
 class RandomJoke extends Component {
   constructor() {
@@ -30,10 +30,10 @@ class RandomJoke extends Component {
         },
         (error) => {
           this.setState({
-            isLoadedL: true,
+            isLoaded: true,
             error,
           });
-        }
+        },
       );
   };
 
@@ -46,17 +46,14 @@ class RandomJoke extends Component {
     if (error) {
       return <div>Error: {error.message}</div>;
     }
+    if (!isLoaded) {
+      return <div>Loading...</div>;
+    }
     return (
       <div className="chuckWrap">
-        {isLoaded ? (
-          <>
-            <div className="chuckHeader" />
-            <button onClick={this.getRandomJoke}>Get a random joke</button>
-            <Card joke={joke} id={id} />
-          </>
-        ) : (
-          <div>Loading...</div>
-        )}
+        <div className="chuckHeader" />
+        <button onClick={this.getRandomJoke}>Get a random joke</button>
+        <Card joke={joke} id={id} />
       </div>
     );
   }
