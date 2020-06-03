@@ -31,10 +31,11 @@ class CategoryJokes extends Component {
       .then((response) => response.json())
       .then(
         (data) => {
+          const { responseDataCategories } = this.state;
           this.setState({
             isLoading: false,
             responseDataCategories: ['all', ...data],
-            selectedCategory: this.state.responseDataCategories[0],
+            selectedCategory: responseDataCategories[0],
           });
         },
         (error) => {
@@ -47,7 +48,7 @@ class CategoryJokes extends Component {
   };
 
   getJokesFromCategory = () => {
-    const { selectedCategory } = this.state;
+    const { selectedCategory, responseDataJokes } = this.state;
     console.log('getJokes selectedCatgory: ', selectedCategory);
     const url =
       selectedCategory === undefined || selectedCategory === 'all'
@@ -59,7 +60,7 @@ class CategoryJokes extends Component {
         (data) => {
           this.setState({
             isLoading: false,
-            responseDataJokes: [...this.state.responseDataJokes, data],
+            responseDataJokes: [...responseDataJokes, data],
           });
         },
         (error) => {
@@ -76,13 +77,11 @@ class CategoryJokes extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.selectedCategory !== this.state.selectedCategory) {
+    const { selectedCategory, countOfJokes } = this.state;
+    if (prevState.selectedCategory !== selectedCategory) {
       this.setState({ responseDataJokes: [], countOfJokes: 1 });
       this.getJokesFromCategory();
-    } else if (
-      prevState.countOfJokes !== this.state.countOfJokes &&
-      this.state.countOfJokes > 1
-    ) {
+    } else if (prevState.countOfJokes !== countOfJokes && countOfJokes > 1) {
       this.getJokesFromCategory();
     }
   }
