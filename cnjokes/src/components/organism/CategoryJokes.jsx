@@ -48,7 +48,7 @@ class CategoryJokes extends Component {
   };
 
   getJokesFromCategory = () => {
-    const { selectedCategory, responseDataJokes } = this.state;
+    const { selectedCategory } = this.state;
     console.log('getJokes selectedCatgory: ', selectedCategory);
     const url =
       selectedCategory === undefined || selectedCategory === 'all'
@@ -58,6 +58,7 @@ class CategoryJokes extends Component {
       .then((response) => response.json())
       .then(
         (data) => {
+          const { responseDataJokes } = this.state;
           this.setState({
             isLoading: false,
             responseDataJokes: [...responseDataJokes, data],
