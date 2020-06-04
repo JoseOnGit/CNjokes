@@ -20,7 +20,7 @@ class CategoryJokes extends Component {
       error: null,
       isLoading: true,
       countOfJokes: 1,
-      responseDataCategories: [],
+      responseDataCategories: ['all'],
       responseDataJokes: [],
       selectedCategory: '',
     };
@@ -34,7 +34,7 @@ class CategoryJokes extends Component {
           const { responseDataCategories } = this.state;
           this.setState({
             isLoading: false,
-            responseDataCategories: ['all', ...data],
+            responseDataCategories: responseDataCategories.concat(data),
             selectedCategory: responseDataCategories[0],
           });
         },
@@ -49,9 +49,8 @@ class CategoryJokes extends Component {
 
   getJokesFromCategory = () => {
     const { selectedCategory } = this.state;
-    console.log('getJokes selectedCatgory: ', selectedCategory);
     const url =
-      selectedCategory === undefined || selectedCategory === 'all'
+      selectedCategory === 'all'
         ? `${CHUCK_API}${RANDOM_JOKE_QUERY}`
         : `${CHUCK_API}${RANDOM_JOKES_FROM_CATEGORY}${selectedCategory}`;
     fetch(url)
