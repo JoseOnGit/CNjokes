@@ -6,8 +6,8 @@ import SearchInput from '../atoms/SearchInput';
 import { CHUCK_API, SEARCH_JOKES_QUERY } from '../../GlobalVariables';
 
 class SearchJokes extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       error: null,
@@ -22,8 +22,7 @@ class SearchJokes extends Component {
     fetch(`${CHUCK_API}${SEARCH_JOKES_QUERY}${searchPhrase}`)
       .then((response) => response.json())
       .then(
-        (data) => {
-          const { result } = data;
+        ({ result }) => {
           this.setState({
             isLoading: false,
             responseData: result,
@@ -40,6 +39,7 @@ class SearchJokes extends Component {
 
   componentDidUpdate(prevProps, { searchPhrase }) {
     const { searchPhrase: currentSearchPhrase } = this.state;
+
     if (
       searchPhrase !== currentSearchPhrase &&
       currentSearchPhrase.length >= 3
@@ -67,15 +67,13 @@ class SearchJokes extends Component {
 
     if (isLoading && searchPhrase.length >= 3) return <div>Loading...</div>;
 
-    let splicedJokes = [];
-    if (responseData) splicedJokes = this.spliceJokes(responseData);
+    const splicedJokes = this.spliceJokes(responseData);
 
     return (
       <JokesWrapper>
         {responseData &&
-          splicedJokes.map(({ id, value }) => {
-            return <Card joke={value} key={id} />;
-          })}
+          splicedJokes.map(({ id, value }) => <Card joke={value} key={id} />;
+          )}
       </JokesWrapper>
     );
   };

@@ -27,14 +27,17 @@ class CategoryJokes extends Component {
   }
 
   getCategories = () => {
-    fetch(`${CHUCK_API}${JOKES_CATEGORIES}`)
+    // TODO: Set loadling to truei   
+    fetch(JOKES_CATEGORIES)
       .then((response) => response.json())
       .then(
         (data) => {
           const { responseDataCategories } = this.state;
+          const updatedResponseDataCategories = responseDataCategories.concat(data);
+
           this.setState({
             isLoading: false,
-            responseDataCategories: responseDataCategories.concat(data),
+            responseDataCategories: updatedResponseDataCategories,
             selectedCategory: responseDataCategories[0],
           });
         },
@@ -49,10 +52,12 @@ class CategoryJokes extends Component {
 
   getJokesFromCategory = () => {
     const { selectedCategory } = this.state;
+
     const url =
       selectedCategory === 'all'
         ? `${CHUCK_API}${RANDOM_JOKE_QUERY}`
         : `${CHUCK_API}${RANDOM_JOKES_FROM_CATEGORY}${selectedCategory}`;
+
     fetch(url)
       .then((response) => response.json())
       .then(
@@ -76,9 +81,11 @@ class CategoryJokes extends Component {
     this.getCategories();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+componentDidUpdate(prevProps, prevState) {
+    const {  selectedCategory: prevSelectedCategory } = prevState || {};
     const { selectedCategory, countOfJokes } = this.state;
-    if (prevState.selectedCategory !== selectedCategory) {
+
+    if (prevSelectedCategory !== selectedCategory) {
       this.setState({ responseDataJokes: [], countOfJokes: 1 });
       this.getJokesFromCategory();
     } else if (prevState.countOfJokes !== countOfJokes && countOfJokes > 1) {
@@ -88,11 +95,13 @@ class CategoryJokes extends Component {
 
   spliceJokes = () => {
     const { responseData, countOfJokes } = this.state;
+
     return responseData.splice(0, countOfJokes);
   };
 
   handleInputChanged = ({ target }) => {
-    const { value } = target;
+    const { value } = target || {};
+
     this.setState({
       countOfJokes: value,
     });
@@ -100,14 +109,15 @@ class CategoryJokes extends Component {
 
   handleDropdownChanged = ({ target }) => {
     const { value } = target;
+
     this.setState({ selectedCategory: value });
   };
 
   removeDuplicates(originalArray) {
     const filteredArray = [];
-
-    originalArray.map((x) =>
-      filteredArray.filter((a) => a.id === x.id).length > 0
+    // TODO: [ ...new  Set() ] // https://medium.com/dailyjs/how-to-remove-array-duplicates-in-es6-5daa8789641c
+    originalArray && originalArray.map(({ id: xid }) =>
+      filteredArray.filter(({ id }) => id === xid).length > 0
         ? null
         : filteredArray.push(x),
     );
@@ -120,6 +130,7 @@ class CategoryJokes extends Component {
     if (error) {
       const { message } = error;
       console.log(message);
+
       return <div>Error: {message}</div>;
     }
     if (isLoading) {
@@ -127,11 +138,10 @@ class CategoryJokes extends Component {
     }
 
     const filteredArray = this.removeDuplicates(responseDataJokes, 'id');
+
     return (
       <JokesWrapper>
-        {filteredArray.map(({ id, value }) => {
-          return <Card joke={value} key={id} />;
-        })}
+        {filteredArray && filteredArray.map(({ id, value }) => <Card joke={value} key={id} /> )}
       </JokesWrapper>
     );
   };
