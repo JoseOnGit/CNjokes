@@ -2,7 +2,7 @@ import React from "react";
 import { Jumbotron } from "reactstrap";
 import { Link } from "react-router-dom";
 
-export function NotFoundPage() {
+function NotFoundPage() {
   return (
     <Jumbotron>
       <h1>Whoops!</h1>
@@ -16,3 +16,5 @@ export function NotFoundPage() {
     </Jumbotron>
   );
 }
+
+export default NotFoundPage

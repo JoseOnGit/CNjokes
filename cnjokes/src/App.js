@@ -3,12 +3,17 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 import './App.css';
 
-import { Routes } from "./routes";
+import Routes from "./routes";
+import Layout from './components/layout/Layout';
 
-export function App() {
+function App() {
   return (
-    <Router>
-      <Routes />
-    </Router>
+    <Layout>
+      <Router>
+        <Routes />
+      </Router>
+    </Layout>
   );
 }
+
+export default App;

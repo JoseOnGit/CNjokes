@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input } from 'reactstrap';
 
-export function JokeCategorySelect(props) {
+function JokeCategorySelect(props) {
     const { categories, handleCategoryChange } = props || {};
 
     return (
@@ -13,3 +13,5 @@ export function JokeCategorySelect(props) {
         </Input>
     );
 }
+
+export default JokeCategorySelect

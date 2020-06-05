@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 
-import { JokeCategorySelect } from '../Components/JokeCategorySelect';
-import { JokeCounter } from '../Components/JokeCounter';
-import { JokeCard } from '../Components/JokeCard';
+import JokeCategorySelect from '../components/JokeCategorySelect';
+import JokeCounter from '../components/JokeCounter';
+import JokeList from '../components/JokeList';
 
 const CHUCK_API = 'https://api.chucknorris.io/';
 const RANDOM_JOKE_QUERY = 'jokes/random';
 const CATEGORIES_QUERY = 'jokes/categories';
 
-export class JokePage extends Component {
+class MainPage extends Component {
     constructor() {
         super();
 
@@ -71,9 +71,7 @@ export class JokePage extends Component {
         return (
             <div className="chuckWrap">
                 <div className="chuckHeader" />
-                {
-                    jokeList.map((joke) => <JokeCard joke={joke}/>)
-                }
+                <JokeList jokeList={jokeList}/>
                 <button onClick={this.getJokes}>Get a random joke</button>
                 <JokeCategorySelect categories={this.state.categories} handleCategoryChange={this.handleCategoryChange}/>
                 <JokeCounter handleJokeCountChange={this.handleJokeCountChange}/>
@@ -81,3 +79,5 @@ export class JokePage extends Component {
         );
     }
 }
+
+export default MainPage

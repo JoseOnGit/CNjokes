@@ -1,14 +1,16 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 
-import { JokePage } from "./pages/JokePage";
-import { NotFoundPage } from "./pages/NotFoundPage";
+import MainPage from './pages/MainPage';
+import NotFoundPage from "./pages/NotFoundPage";
 
-export function Routes() {
+function Routes() {
   return (
     <Switch>
-      <Route exact path="/" component={JokePage} />
+      <Route exact path="/" component={MainPage} />
       <Route path="*" component={NotFoundPage} />
     </Switch>
   );
 }
+
+export default Routes;

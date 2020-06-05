@@ -1,13 +1,16 @@
 import React from "react";
 
-import { AppNavbar } from "../Layout/AppNavbar";
+import { AppNavbar } from "./AppNavbar";
 import { AppFooter } from './AppFooter';
 
-export function Layout() {
+function Layout({ children }) {
     return (
         <>
             <AppNavbar />
+                {children}
             <AppFooter />
         </>
     )
 }
+
+export default Layout;
