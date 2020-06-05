@@ -30,12 +30,13 @@ class JokeNavbarSearch extends Component {
       this.getSearchedJokes(searchedString)
     }
     else {
-      this.setState({searchedJokes: []})
+      this.setState({ searchedJokes: [] })
     }
   }
 
   render() {
-    const { searchedJokes } = this.state;
+const { searchedJokes } = this.state;
+
     return (
       <Form>
         <Input type="text" onChange={this.handleSearchChange}/>

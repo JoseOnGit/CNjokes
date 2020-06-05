@@ -10,7 +10,7 @@ const CATEGORIES_QUERY = 'jokes/categories';
 
 class MainPage extends Component {
     constructor() {
-        super();
+        super(props);
 
         this.state = {
             jokeList: [],
@@ -20,22 +20,19 @@ class MainPage extends Component {
         };
     }
 
-    apiBaseGet = (query) => {
-        return fetch(`${CHUCK_API}${query}`)
-                .then(response => response.json())
-    }
+    apiBaseGet = query => fetch(`${CHUCK_API}${query}`).then(response => response.json())
 
     getJokes = () => {
         const { selectedCategory, jokeCount } = this.state || {};
-        const categoryQuery = (selectedCategory === 'Any') ? '' : `?category=${selectedCategory}`;
-        
+        const categoryQuery = selectedCategory === 'Any' ? '' : `?category=${selectedCategory}`;
+
         this.setState({jokeList: []})
 
         let i;
-        for (i = 0; i< jokeCount; i++) {
+        for (i = 0; i < jokeCount; i++) {
             this.apiBaseGet(`${RANDOM_JOKE_QUERY}${categoryQuery}`)
             .then(data => {
-                const { jokeList } = this.state || {}; 
+                const { jokeList } = this.state || {};
                 this.setState({jokeList: jokeList.concat(data.value)})
             });
         }

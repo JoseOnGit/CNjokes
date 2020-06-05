@@ -6,14 +6,12 @@ import './App.css';
 import Routes from "./routes";
 import Layout from './components/layout/Layout';
 
-function App() {
-  return (
-    <Layout>
-      <Router>
-        <Routes />
-      </Router>
-    </Layout>
-  );
-}
+const App = () => (
+  <Layout>
+    <Router>
+      <Routes />
+    </Router>
+  </Layout>
+);
 
 export default App;
