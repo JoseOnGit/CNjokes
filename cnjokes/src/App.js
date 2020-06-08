@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import "./App.css";
+import React, { Component } from 'react';
+import './app.css';
 
-import CategoryJokes from "./components/organism/CategoryJokes";
-import SearchJokes from "./components/organism/SearchJokes";
+// import CategoryJokes from './components/organism/CategoryJokes';
+import SearchJokes from './components/organism/SearchJokes';
 
 class App extends Component {
   render() {
@@ -12,7 +12,7 @@ class App extends Component {
         <div className="content">
           <h1 className="text">Chuck Norris Jokes</h1>
           <div className="chuckHeader" />
-          <CategoryJokes />
+          {/* <CategoryJokes /> */}
           <SearchJokes />
         </div>
       </div>

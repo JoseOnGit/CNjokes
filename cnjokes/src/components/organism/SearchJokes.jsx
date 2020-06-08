@@ -1,25 +1,29 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import Card from '../molecules/Card';
 import ContentWrapper from '../atoms/ContentWrapper';
 import JokesWrapper from '../atoms/JokesWrapper';
 import SearchInput from '../atoms/SearchInput';
-import { CHUCK_API, SEARCH_JOKES_QUERY } from '../../GlobalVariables';
+
+import { SEARCH_JOKES_QUERY } from '../../GlobalVariables';
+import * as actionTypes from '../../redux/actions';
 
 class SearchJokes extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      error: null,
-      isLoading: true,
+      // error: null,
+      // isLoading: true,
       searchPhrase: '',
-      responseData: [],
+      // responseData: [],
     };
   }
 
   getJokes = () => {
     const { searchPhrase } = this.state;
-    fetch(`${CHUCK_API}${SEARCH_JOKES_QUERY}${searchPhrase}`)
+    fetch(`${SEARCH_JOKES_QUERY}${searchPhrase}`)
       .then((response) => response.json())
       .then(
         ({ result }) => {
@@ -59,9 +63,10 @@ class SearchJokes extends Component {
 
   renderData = () => {
     const { error, isLoading, responseData, searchPhrase } = this.state;
+
     if (error) {
       const { message } = error;
-      console.log(message);
+      console.error(message);
       return <div>Error: {message}</div>;
     }
 
@@ -72,8 +77,7 @@ class SearchJokes extends Component {
     return (
       <JokesWrapper>
         {responseData &&
-          splicedJokes.map(({ id, value }) => <Card joke={value} key={id} />;
-          )}
+          splicedJokes.map(({ id, value }) => <Card joke={value} key={id} />)}
       </JokesWrapper>
     );
   };
@@ -96,4 +100,25 @@ class SearchJokes extends Component {
   }
 }
 
-export default SearchJokes;
+const mapStateToProps = (state) => {
+  return {
+    jokes: state.searchedJokes,
+    loading: state.isLoading,
+    err: state.error,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onFetch: () => dispatch({ type: actionTypes.FETCH_SEARCHED_JOKES }),
+    onSuccessfulFetch: (jokes) =>
+      dispatch({ type: actionTypes.FETCH_SEARCHED_JOKES_SUCCESS, data: jokes }),
+    onFailureFetch: (error) =>
+      dispatch({
+        type: actionTypes.FETCH_SEARCHED_JOKES_FAILURE,
+        error: error,
+      }),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchJokes);
