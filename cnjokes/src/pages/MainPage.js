@@ -58,8 +58,8 @@ function MainPage()  {
     }
 
     return (
-        <div className="chuckWrap">
-            <div className="chuckHeader" />
+        <div className="chuck-wrap">
+            <div className="chuck-header" />
             <JokeList jokeList={jokeList} isLoading={isLoading}/>
             <button onClick={getJokes}>Get a random joke</button>
             <JokeCategorySelect categories={categories} handleCategoryChange={handleCategoryChange}/>
