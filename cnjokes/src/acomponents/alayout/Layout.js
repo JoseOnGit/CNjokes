@@ -1,7 +1,7 @@
 import React from "react";
 
-import { AppNavbar } from "./AppNavbar";
-import { AppFooter } from './AppFooter';
+import AppNavbar from "./AppNavbar";
+import AppFooter from './AppFooter';
 
 function Layout({ children }) {
     return (

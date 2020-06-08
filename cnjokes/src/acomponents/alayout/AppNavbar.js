@@ -3,7 +3,7 @@ import { Navbar, NavbarBrand } from "reactstrap";
 
 import JokeNavbarSearch from '../JokeNavbarSearch';
 
-export function AppNavbar() {
+function AppNavbar() {
   return (
     <Navbar color="faded" dark>
       <NavbarBrand href="/">CNjokes</NavbarBrand>
@@ -11,3 +11,5 @@ export function AppNavbar() {
     </Navbar>
   );
 }
+
+export default AppNavbar

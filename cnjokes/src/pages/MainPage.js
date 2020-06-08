@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import JokeCategorySelect from '../components/JokeCategorySelect';
 import JokeCounter from '../components/JokeCounter';
@@ -8,73 +8,64 @@ const CHUCK_API = 'https://api.chucknorris.io/';
 const RANDOM_JOKE_QUERY = 'jokes/random';
 const CATEGORIES_QUERY = 'jokes/categories';
 
-class MainPage extends Component {
-    constructor() {
-        super(props);
+function MainPage()  {
+    const [jokeList, setJokeList] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState('Any');
+    const [jokeCount, setJokeCount] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
 
-        this.state = {
-            jokeList: [],
-            categories: [],
-            selectedCategory: 'Any',
-            jokeCount: 1,
-        };
-    }
+    const apiBaseGet = query => fetch(`${CHUCK_API}${query}`).then(response => response.json())
 
-    apiBaseGet = query => fetch(`${CHUCK_API}${query}`).then(response => response.json())
-
-    getJokes = () => {
-        const { selectedCategory, jokeCount } = this.state || {};
+    const getJokes = () => {
         const categoryQuery = selectedCategory === 'Any' ? '' : `?category=${selectedCategory}`;
 
-        this.setState({jokeList: []})
-
+        setIsLoading(true);
+        let tempJokeList = [];
         let i;
+        let responseCounter = 0;
         for (i = 0; i < jokeCount; i++) {
-            this.apiBaseGet(`${RANDOM_JOKE_QUERY}${categoryQuery}`)
+            apiBaseGet(`${RANDOM_JOKE_QUERY}${categoryQuery}`)
             .then(data => {
-                const { jokeList } = this.state || {};
-                this.setState({jokeList: jokeList.concat(data.value)})
+                tempJokeList.push(data.value);
+                responseCounter++;
+                if (responseCounter === jokeCount) {
+                    setJokeList(tempJokeList);
+                    setIsLoading(false);
+                }
             });
         }
     };
 
-    getCategories = () => {
-        this.apiBaseGet(CATEGORIES_QUERY)
-            .then(data => this.setState({categories: data}))
+    const getCategories = () => {
+        apiBaseGet(CATEGORIES_QUERY)
+            .then(data => setCategories(data))
     };
+    
+    useEffect(() => {
+        getJokes();
+        getCategories();
+    }, [])
 
-    componentDidMount() {
-        this.getJokes();
-        this.getCategories();
-    }
-
-    handleCategoryChange = event => {
+    const handleCategoryChange = event => {
         const { value } = event.target || {};
-        this.setState({
-            selectedCategory: value,
-        })
+        setSelectedCategory(value)
     }
 
-    handleJokeCountChange = event => {
+    const handleJokeCountChange = event => {
         const { value } = event.target || {};
-        this.setState({
-            jokeCount: value,
-        })
+        setJokeCount(parseInt(value))
     }
 
-    render() {
-        const { jokeList } = this.state;
-
-        return (
-            <div className="chuckWrap">
-                <div className="chuckHeader" />
-                <JokeList jokeList={jokeList}/>
-                <button onClick={this.getJokes}>Get a random joke</button>
-                <JokeCategorySelect categories={this.state.categories} handleCategoryChange={this.handleCategoryChange}/>
-                <JokeCounter handleJokeCountChange={this.handleJokeCountChange}/>
-            </div>
-        );
-    }
+    return (
+        <div className="chuckWrap">
+            <div className="chuckHeader" />
+            <JokeList jokeList={jokeList} isLoading={isLoading}/>
+            <button onClick={getJokes}>Get a random joke</button>
+            <JokeCategorySelect categories={categories} handleCategoryChange={handleCategoryChange}/>
+            <JokeCounter handleJokeCountChange={handleJokeCountChange}/>
+        </div>
+    );
 }
 
 export default MainPage
