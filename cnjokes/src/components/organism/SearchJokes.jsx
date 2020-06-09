@@ -7,48 +7,54 @@ import JokesWrapper from '../atoms/JokesWrapper';
 import SearchInput from '../atoms/SearchInput';
 
 import { SEARCH_JOKES_QUERY } from '../../GlobalVariables';
-import * as actionTypes from '../../redux/actions';
+import {
+  fetchSearchedJokes,
+  fetchSearchedJokesSuccess,
+  fetchProductsError,
+} from '../../redux/actions';
+
+import {
+  getJokes,
+  getJokesLoading,
+  getJokesError,
+} from '../../redux/selectors';
 
 class SearchJokes extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      // error: null,
-      // isLoading: true,
       searchPhrase: '',
-      // responseData: [],
     };
   }
 
   getJokes = () => {
-    const { searchPhrase } = this.state;
-    fetch(`${SEARCH_JOKES_QUERY}${searchPhrase}`)
-      .then((response) => response.json())
-      .then(
-        ({ result }) => {
-          this.setState({
-            isLoading: false,
-            responseData: result,
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoading: false,
-            error,
-          });
-        },
-      );
+    return (dispatch) => {
+      dispatch(fetchSearchedJokes());
+      const { searchPhrase } = this.state;
+
+      fetch(`${SEARCH_JOKES_QUERY}${searchPhrase}`)
+        .then((response) => response.json())
+        .then(
+          ({ result }) => {
+            dispatch(fetchSearchedJokesSuccess(result));
+          },
+          (error) => {
+            dispatch(fetchProductsError(error));
+          },
+        );
+    };
   };
 
   componentDidUpdate(prevProps, { searchPhrase }) {
     const { searchPhrase: currentSearchPhrase } = this.state;
+    const { dispatch } = this.props;
 
     if (
       searchPhrase !== currentSearchPhrase &&
       currentSearchPhrase.length >= 3
     ) {
-      this.getJokes();
+      dispatch(this.getJokes());
     }
   }
 
@@ -62,7 +68,8 @@ class SearchJokes extends Component {
   spliceJokes = (jokes) => jokes.splice(0, 25);
 
   renderData = () => {
-    const { error, isLoading, responseData, searchPhrase } = this.state;
+    const { searchPhrase } = this.state;
+    const { jokes, isLoading, error } = this.props;
 
     if (error) {
       const { message } = error;
@@ -72,11 +79,11 @@ class SearchJokes extends Component {
 
     if (isLoading && searchPhrase.length >= 3) return <div>Loading...</div>;
 
-    const splicedJokes = this.spliceJokes(responseData);
+    const splicedJokes = this.spliceJokes(jokes);
 
     return (
       <JokesWrapper>
-        {responseData &&
+        {jokes &&
           splicedJokes.map(({ id, value }) => <Card joke={value} key={id} />)}
       </JokesWrapper>
     );
@@ -102,23 +109,10 @@ class SearchJokes extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    jokes: state.searchedJokes,
-    loading: state.isLoading,
-    err: state.error,
+    jokes: getJokes(state),
+    isLoading: getJokesLoading(state),
+    error: getJokesError(state),
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onFetch: () => dispatch({ type: actionTypes.FETCH_SEARCHED_JOKES }),
-    onSuccessfulFetch: (jokes) =>
-      dispatch({ type: actionTypes.FETCH_SEARCHED_JOKES_SUCCESS, data: jokes }),
-    onFailureFetch: (error) =>
-      dispatch({
-        type: actionTypes.FETCH_SEARCHED_JOKES_FAILURE,
-        error: error,
-      }),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(SearchJokes);
+export default connect(mapStateToProps)(SearchJokes);
