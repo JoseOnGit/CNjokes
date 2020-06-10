@@ -7,17 +7,18 @@ import NumberSetter from '../molecules/NumberSetter';
 import Dropdown from '../molecules/Dropdown';
 
 import {
-  RANDOM_JOKES_FROM_CATEGORY,
-  RANDOM_JOKE_QUERY,
-} from '../../GlobalVariables';
-
-import { getCategories as fetchCategoriesFromAPI } from '../../redux/categoryJokes/actions';
+  getCategories as fetchCategoriesFromAPI,
+  getJokesFromCategory,
+  setCategory,
+  setJokes,
+} from '../../redux/categoryJokes/actions';
 
 import {
   getCategories,
   getSelectedCategory,
-  getCategoriesLoading,
-  getCategoriesError,
+  getJokes,
+  getJokesError,
+  getJokesLoading,
 } from '../../redux/categoryJokes/selectors';
 
 class CategoryJokes extends Component {
@@ -25,61 +26,32 @@ class CategoryJokes extends Component {
     super();
 
     this.state = {
-      error: null,
-      isLoading: false,
       countOfJokes: 1,
-      responseDataJokes: [],
     };
   }
 
-  getJokesFromCategory = () => {
-    this.setState({ isLoading: true });
-    const { selectedCategory } = this.state;
-
-    const url =
-      selectedCategory === 'all'
-        ? RANDOM_JOKE_QUERY
-        : `${RANDOM_JOKES_FROM_CATEGORY}${selectedCategory}`;
-
-    fetch(url)
-      .then((response) => response.json())
-      .then(
-        (data) => {
-          const { responseDataJokes } = this.state;
-          this.setState({
-            isLoading: false,
-            responseDataJokes: [...responseDataJokes, data],
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoading: false,
-            error,
-          });
-        },
-      );
-  };
-
   componentDidMount() {
-    this.props.fetchCategories();
+    const { fetchCategories } = this.props;
+    fetchCategories();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const {
-      selectedCategory: prevSelectedCategory,
-      countOfJokes: prevCountOfJokes,
-    } = prevState || {};
-    const { selectedCategory, countOfJokes } = this.state;
+    const { countOfJokes: prevCountOfJokes } = prevState || {};
+    const { selectedCategory: prevSelectedCategory } = prevProps || {};
+
+    const { countOfJokes } = this.state;
+    const { fetchJokes, selectedCategory, setJokes } = this.props;
 
     const isCurrentCategorySame = prevSelectedCategory !== selectedCategory;
     const isCurrentCountSame = prevCountOfJokes !== countOfJokes;
     const isCountHigherThatOne = countOfJokes > 1;
 
     if (isCurrentCategorySame) {
-      this.setState({ responseDataJokes: [], countOfJokes: 1 });
-      this.getJokesFromCategory();
+      this.setState({ countOfJokes: 1 });
+      setJokes([]);
+      fetchJokes(selectedCategory);
     } else if (isCurrentCountSame && isCountHigherThatOne) {
-      this.getJokesFromCategory();
+      fetchJokes(selectedCategory);
     }
   }
 
@@ -98,7 +70,7 @@ class CategoryJokes extends Component {
   handleDropdownChanged = ({ target }) => {
     const { value } = target || {};
 
-    this.setState({ selectedCategory: value });
+    this.props.setCategory(value);
   };
 
   removeDuplicates(originalArray) {
@@ -119,19 +91,19 @@ class CategoryJokes extends Component {
   }
 
   renderData = () => {
-    const { error, isLoading, responseDataJokes } = this.state;
+    const { jokesError, jokesAreLoading, jokes } = this.props;
 
-    if (error) {
-      const { message } = error;
+    if (jokesError) {
+      const { message } = jokesError;
       console.error(message);
 
       return <div>Error: {message}</div>;
     }
-    if (isLoading) {
+    if (jokesAreLoading) {
       return <div>Loading...</div>;
     }
 
-    const filteredArray = this.removeDuplicates(responseDataJokes);
+    const filteredArray = this.removeDuplicates(jokes);
 
     return (
       <JokesWrapper>
@@ -167,11 +139,15 @@ const mapStateToProps = (state) => {
   return {
     categories: getCategories(state),
     selectedCategory: getSelectedCategory(state),
-    catogoriesAreLoading: getCategoriesLoading(state),
-    categoriesError: getCategoriesError(state),
+    jokes: getJokes(state),
+    jokesAreLoading: getJokesLoading(state),
+    jokesError: getJokesError(state),
   };
 };
 
 export default connect(mapStateToProps, {
   fetchCategories: () => fetchCategoriesFromAPI(),
+  fetchJokes: (selectedCategory) => getJokesFromCategory(selectedCategory),
+  setCategory: (category) => setCategory(category),
+  setJokes: (jokes) => setJokes(jokes),
 })(CategoryJokes);
