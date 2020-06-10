@@ -1,7 +1,9 @@
-import React from "react";
-import { Navbar, NavbarBrand } from "reactstrap";
+import React from 'react';
+import { Navbar, NavbarBrand } from 'reactstrap';
 
 import JokeNavbarSearch from '../JokeNavbarSearch';
+
+import './AppNavbar.css';
 
 function AppNavbar() {
   return (
@@ -12,4 +14,4 @@ function AppNavbar() {
   );
 }
 
-export default AppNavbar
+export default AppNavbar;

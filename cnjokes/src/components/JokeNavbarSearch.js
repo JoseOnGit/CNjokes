@@ -4,6 +4,8 @@ import { Form, Input } from 'reactstrap';
 import JokeList from './JokeList';
 import { CHUCK_API, SEARCH_QUERY } from '../GlobalVariables';
 
+import './layout/AppNavbar.css';
+
 function JokeNavbarSearch() {
   const [searchedJokes, setSearchedJokes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +33,11 @@ function JokeNavbarSearch() {
 
   return (
     <Form>
-      <Input type="text" onChange={handleSearchChange} />
+      <Input
+        className="search-input"
+        type="text"
+        onChange={handleSearchChange}
+      />
       <JokeList jokeList={searchedJokes} isLoading={isLoading} />
     </Form>
   );

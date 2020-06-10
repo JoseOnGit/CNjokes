@@ -23,22 +23,21 @@ function MainPage() {
       selectedCategory === 'Any' ? '' : `?category=${selectedCategory}`;
 
     setIsLoading(true);
-    let tempJokeList = new Array(jokeCount);
-    tempJokeList.fill('');
+    let tempJokeList = [...Array(jokeCount)];
 
-    const getJokesToArray = () =>
+    const callJokeApi = () =>
       tempJokeList.map(() => {
         return apiBaseGet(`${RANDOM_JOKE_QUERY}${categoryQuery}`);
       });
 
-    Promise.all(getJokesToArray())
+    const fillJokeList = (arrayOfData) => {
+      setJokeList(arrayOfData.map(({ value }) => value));
+      setIsLoading(false);
+    };
+
+    Promise.all(callJokeApi())
       .then((responses) => responses.map((response) => response.json()))
-      .then((a) =>
-        Promise.all(a).then((arrayOfData) => {
-          setJokeList(arrayOfData.map((data) => data.value));
-          setIsLoading(false);
-        })
-      );
+      .then((dataPromise) => Promise.all(dataPromise).then(fillJokeList));
   };
 
   const getCategories = () => {

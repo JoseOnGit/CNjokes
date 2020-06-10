@@ -6,17 +6,18 @@ function JokeList(props) {
   const { jokeList, isLoading } = props || {};
 
   if (isLoading) {
-    return <>Loading...</>
+    return <>Loading...</>;
   }
 
   return (
-    <>
-      {
-        jokeList.map((joke) => <JokeCard joke={joke}/>)
-      }
-    </>
-  )
-
+    <ul>
+      {jokeList.map((joke) => (
+        <li>
+          <JokeCard joke={joke} />
+        </li>
+      ))}
+    </ul>
+  );
 }
 
-export default JokeList
+export default JokeList;
