@@ -1,37 +1,11 @@
-import {
-  FETCH_SEARCHED_JOKES,
-  FETCH_SEARCHED_JOKES_SUCCESS,
-  FETCH_SEARCHED_JOKES_FAILURE,
-} from './actions';
+import { combineReducers } from 'redux';
 
-const initialState = {
-  error: null,
-  isLoading: false,
-  searchedJokes: [],
-};
+import searchReducer from './searchJokes/reducer';
+import categoryReducer from './categoryJokes/reducer';
 
-const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case FETCH_SEARCHED_JOKES:
-      return {
-        ...state,
-        isLoading: true,
-      };
-    case FETCH_SEARCHED_JOKES_SUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        searchedJokes: action.searchedJokes,
-      };
-    case FETCH_SEARCHED_JOKES_FAILURE:
-      return {
-        ...state,
-        isLoading: false,
-        error: action.error,
-      };
-    default:
-      return state;
-  }
-};
+const rootReducer = combineReducers({
+  search: searchReducer,
+  category: categoryReducer,
+});
 
-export default reducer;
+export default rootReducer;

@@ -6,18 +6,13 @@ import ContentWrapper from '../atoms/ContentWrapper';
 import JokesWrapper from '../atoms/JokesWrapper';
 import SearchInput from '../atoms/SearchInput';
 
-import { SEARCH_JOKES_QUERY } from '../../GlobalVariables';
-import {
-  fetchSearchedJokes,
-  fetchSearchedJokesSuccess,
-  fetchProductsError,
-} from '../../redux/actions';
+import { fetchJokes } from '../../redux/searchJokes/actions';
 
 import {
   getJokes,
   getJokesLoading,
   getJokesError,
-} from '../../redux/selectors';
+} from '../../redux/searchJokes/selectors';
 
 class SearchJokes extends Component {
   constructor(props) {
@@ -28,33 +23,14 @@ class SearchJokes extends Component {
     };
   }
 
-  getJokes = () => {
-    return (dispatch) => {
-      dispatch(fetchSearchedJokes());
-      const { searchPhrase } = this.state;
-
-      fetch(`${SEARCH_JOKES_QUERY}${searchPhrase}`)
-        .then((response) => response.json())
-        .then(
-          ({ result }) => {
-            dispatch(fetchSearchedJokesSuccess(result));
-          },
-          (error) => {
-            dispatch(fetchProductsError(error));
-          },
-        );
-    };
-  };
-
   componentDidUpdate(prevProps, { searchPhrase }) {
     const { searchPhrase: currentSearchPhrase } = this.state;
-    const { dispatch } = this.props;
 
     if (
       searchPhrase !== currentSearchPhrase &&
       currentSearchPhrase.length >= 3
     ) {
-      dispatch(this.getJokes());
+      this.props.fetchJokes(currentSearchPhrase);
     }
   }
 
@@ -115,4 +91,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(SearchJokes);
+export default connect(mapStateToProps, {
+  fetchJokes: (phrase) => fetchJokes(phrase),
+})(SearchJokes);

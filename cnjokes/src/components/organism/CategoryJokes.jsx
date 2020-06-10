@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Card from '../molecules/Card';
 import JokesWrapper from '../atoms/JokesWrapper';
 import ContentWrapper from '../atoms/ContentWrapper';
@@ -6,10 +7,18 @@ import NumberSetter from '../molecules/NumberSetter';
 import Dropdown from '../molecules/Dropdown';
 
 import {
-  JOKES_CATEGORIES,
   RANDOM_JOKES_FROM_CATEGORY,
   RANDOM_JOKE_QUERY,
 } from '../../GlobalVariables';
+
+import { getCategories as fetchCategoriesFromAPI } from '../../redux/categoryJokes/actions';
+
+import {
+  getCategories,
+  getSelectedCategory,
+  getCategoriesLoading,
+  getCategoriesError,
+} from '../../redux/categoryJokes/selectors';
 
 class CategoryJokes extends Component {
   constructor() {
@@ -19,37 +28,9 @@ class CategoryJokes extends Component {
       error: null,
       isLoading: false,
       countOfJokes: 1,
-      responseDataCategories: ['all'],
       responseDataJokes: [],
-      selectedCategory: '',
     };
   }
-
-  getCategories = () => {
-    this.setState({ isLoading: true });
-    fetch(JOKES_CATEGORIES)
-      .then((response) => response.json())
-      .then(
-        (data) => {
-          const { responseDataCategories } = this.state;
-          const updatedResponseDataCategories = responseDataCategories.concat(
-            data,
-          );
-
-          this.setState({
-            isLoading: false,
-            responseDataCategories: updatedResponseDataCategories,
-            selectedCategory: responseDataCategories[0],
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoading: false,
-            error,
-          });
-        },
-      );
-  };
 
   getJokesFromCategory = () => {
     this.setState({ isLoading: true });
@@ -80,7 +61,7 @@ class CategoryJokes extends Component {
   };
 
   componentDidMount() {
-    this.getCategories();
+    this.props.fetchCategories();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -161,11 +142,7 @@ class CategoryJokes extends Component {
   };
 
   render() {
-    const {
-      countOfJokes,
-      responseDataCategories,
-      selectedCategory,
-    } = this.state;
+    const { countOfJokes } = this.state;
 
     return (
       <ContentWrapper>
@@ -175,9 +152,9 @@ class CategoryJokes extends Component {
             onChangeHandler={this.handleInputChanged}
           />
           <Dropdown
-            selectedValue={selectedCategory}
+            selectedValue={this.props.selectedCategory}
             onChangeHandler={this.handleDropdownChanged}
-            data={responseDataCategories}
+            data={this.props.categories}
           />
         </div>
         {this.renderData()}
@@ -186,4 +163,15 @@ class CategoryJokes extends Component {
   }
 }
 
-export default CategoryJokes;
+const mapStateToProps = (state) => {
+  return {
+    categories: getCategories(state),
+    selectedCategory: getSelectedCategory(state),
+    catogoriesAreLoading: getCategoriesLoading(state),
+    categoriesError: getCategoriesError(state),
+  };
+};
+
+export default connect(mapStateToProps, {
+  fetchCategories: () => fetchCategoriesFromAPI(),
+})(CategoryJokes);

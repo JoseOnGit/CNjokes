@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './app.css';
 
-// import CategoryJokes from './components/organism/CategoryJokes';
+import CategoryJokes from './components/organism/CategoryJokes';
 import SearchJokes from './components/organism/SearchJokes';
 
 class App extends Component {
@@ -12,7 +12,7 @@ class App extends Component {
         <div className="content">
           <h1 className="text">Chuck Norris Jokes</h1>
           <div className="chuckHeader" />
-          {/* <CategoryJokes /> */}
+          <CategoryJokes />
           <SearchJokes />
         </div>
       </div>
