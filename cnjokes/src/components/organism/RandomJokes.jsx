@@ -1,60 +1,28 @@
-import React, { Component } from 'react';
-import Card from '../molecules/Card';
+import React, { useContext } from 'react';
+
+import GlobalJokesContext from '../../context/GlobalJokesContext';
+
 import JokesWrapper from '../atoms/JokesWrapper';
 import ContentWrapper from '../atoms/ContentWrapper';
 import NumberSetter from '../molecules/NumberSetter';
-import { CHUCK_API, ALL_JOKES_QUERY } from '../../GlobalVariables';
+import Card from '../molecules/Card';
 
-class RandomJokes extends Component {
-  constructor() {
-    super();
+const RandomJokes = () => {
+  const context = useContext(GlobalJokesContext);
 
-    this.state = {
-      error: null,
-      isLoading: true,
-      countOfJokes: 1,
-      responseData: [],
-    };
-  }
-
-  getJokes = () => {
-    fetch(`${CHUCK_API}${ALL_JOKES_QUERY}`)
-      .then((response) => response.json())
-      .then(
-        (data) => {
-          const { result } = data;
-          this.setState({
-            isLoading: false,
-            responseData: result,
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoading: false,
-            error,
-          });
-        },
-      );
-  };
-
-  componentDidMount() {
-    this.getJokes();
-  }
-
-  spliceJokes = () => {
-    const { responseData, countOfJokes } = this.state;
+  const spliceJokes = () => {
+    const { responseData, countOfJokes } = context.state;
     return responseData.splice(0, countOfJokes);
   };
 
-  handleInputChanged = ({ target }) => {
+  const handleInputChanged = ({ target }) => {
     const { value } = target;
-    this.setState({
-      countOfJokes: value,
-    });
+    const { setCountOfJokes } = context;
+    setCountOfJokes(value);
   };
 
-  renderData = () => {
-    const { error, isLoading } = this.state;
+  const renderData = () => {
+    const { error, isLoading } = context.state;
 
     if (error) {
       const { message } = error;
@@ -66,7 +34,7 @@ class RandomJokes extends Component {
       return <div>Loading...</div>;
     }
 
-    const splicedData = this.spliceJokes();
+    const splicedData = spliceJokes();
 
     return (
       <JokesWrapper>
@@ -77,22 +45,19 @@ class RandomJokes extends Component {
     );
   };
 
-  render() {
-    const { countOfJokes, responseData } = this.state;
+  const { countOfJokes, responseData } = context.state;
+  const jokesLenght = Array.from(responseData).length;
 
-    const jokesLenght = Array.from(responseData).length;
-
-    return (
-      <ContentWrapper>
-        <NumberSetter
-          count={countOfJokes}
-          max={jokesLenght}
-          onChangeHandler={this.handleInputChanged}
-        />
-        {this.renderData()}
-      </ContentWrapper>
-    );
-  }
-}
+  return (
+    <ContentWrapper>
+      <NumberSetter
+        count={countOfJokes}
+        max={jokesLenght}
+        onChangeHandler={handleInputChanged}
+      />
+      {renderData()}
+    </ContentWrapper>
+  );
+};
 
 export default RandomJokes;
