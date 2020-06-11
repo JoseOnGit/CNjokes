@@ -1,21 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import '../../app.css';
 
-class Dropdown extends Component {
-  render() {
-    const { selectedValue, onChangeHandler, data } = this.props;
-
-    return (
-      <select value={selectedValue} onChange={onChangeHandler}>
-        {Array.from(data).map((option) => (
-          <option value={option} key={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-    );
-  }
-}
+const Dropdown = ({ selectedValue, onChangeHandler, data }) => (
+  <select value={selectedValue} onChange={onChangeHandler}>
+    {Array.from(data).map((option) => (
+      <option value={option} key={option}>
+        {option}
+      </option>
+    ))}
+  </select>
+);
 
 export default Dropdown;

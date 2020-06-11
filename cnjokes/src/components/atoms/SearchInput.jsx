@@ -1,18 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class SearchInput extends Component {
-  render() {
-    const { searchPhrase, onChangeHandler } = this.props;
-
-    return (
-      <input
-        type="text"
-        placeholder="Search"
-        value={searchPhrase}
-        onChange={onChangeHandler}
-      />
-    );
-  }
-}
+const SearchInput = ({ searchPhrase, onChangeHandler }) => (
+  <input
+    type="text"
+    placeholder="Search"
+    value={searchPhrase}
+    onChange={onChangeHandler}
+  />
+);
 
 export default SearchInput;
