@@ -1,7 +1,5 @@
 import React from 'react';
 
-import JokeCard from './JokeCard';
-
 function JokeList(props) {
   const { jokeList, isLoading } = props || {};
 
@@ -10,13 +8,15 @@ function JokeList(props) {
   }
 
   return (
-    <ul>
-      {jokeList.map((joke) => (
-        <li>
-          <JokeCard joke={joke} />
-        </li>
-      ))}
-    </ul>
+    <table className="table">
+      <tbody>
+        {jokeList.map((joke) => (
+          <tr>
+            <td>{joke}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
 

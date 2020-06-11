@@ -1,3 +1,37 @@
-.search-input {
+* {
+  box-sizing: border-box;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #ff7700;
+}
+
+.navbar-brand {
+  float: left;
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  background-color: black;
+  color: white;
+}
+
+.search-container {
   float: right;
+}
+
+.search-bar {
+  padding: 6px;
+  margin-top: 8px;
+  font-size: 17px;
+  border: none;
+}
+
+.search-results {
+  position: absolute;
+  background-color: #ff7700;
+  border: 2px solid black;
 }

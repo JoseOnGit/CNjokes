@@ -19,23 +19,21 @@ function MainPage() {
   const apiBaseGet = (query) => fetch(`${CHUCK_API}${query}`);
 
   const getJokes = () => {
+    const callJokeApi = () =>
+      apiBaseGet(`${RANDOM_JOKE_QUERY}${categoryQuery}`);
+
     const categoryQuery =
       selectedCategory === 'Any' ? '' : `?category=${selectedCategory}`;
 
     setIsLoading(true);
-    let tempJokeList = [...Array(jokeCount)];
-
-    const callJokeApi = () =>
-      tempJokeList.map(() => {
-        return apiBaseGet(`${RANDOM_JOKE_QUERY}${categoryQuery}`);
-      });
+    const tempJokeList = Array.from(new Array(jokeCount), () => callJokeApi());
 
     const fillJokeList = (arrayOfData) => {
       setJokeList(arrayOfData.map(({ value }) => value));
       setIsLoading(false);
     };
 
-    Promise.all(callJokeApi())
+    Promise.all(tempJokeList)
       .then((responses) => responses.map((response) => response.json()))
       .then((dataPromise) => Promise.all(dataPromise).then(fillJokeList));
   };

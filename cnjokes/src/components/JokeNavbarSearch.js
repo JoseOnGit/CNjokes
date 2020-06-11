@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-import { Form, Input } from 'reactstrap';
 
 import JokeList from './JokeList';
 import { CHUCK_API, SEARCH_QUERY } from '../GlobalVariables';
-
-import './layout/AppNavbar.css';
 
 function JokeNavbarSearch() {
   const [searchedJokes, setSearchedJokes] = useState([]);
@@ -14,7 +11,9 @@ function JokeNavbarSearch() {
     setIsLoading(true);
     fetch(`${CHUCK_API}${SEARCH_QUERY}${query}`)
       .then((response) => response.json())
-      .then(({ result }) => {
+      .then((data) => {
+        const { result } = data || [];
+        console.log(result);
         const results = result.splice(0, 25).map(({ value }) => value);
         setSearchedJokes(results);
         setIsLoading(false);
@@ -31,15 +30,29 @@ function JokeNavbarSearch() {
     }
   };
 
+  const searchResultsList = () => {
+    if (searchedJokes.length > 0)
+      return (
+        <div className="search-results">
+          <JokeList
+            jokeList={searchedJokes}
+            isLoading={isLoading}
+            className="search-results"
+          />
+        </div>
+      );
+  };
+
   return (
-    <Form>
-      <Input
-        className="search-input"
+    <div className="search-container">
+      <input
+        className="search-bar"
         type="text"
         onChange={handleSearchChange}
+        placeholder="search jokes"
       />
-      <JokeList jokeList={searchedJokes} isLoading={isLoading} />
-    </Form>
+      {searchResultsList()}
+    </div>
   );
 }
 
