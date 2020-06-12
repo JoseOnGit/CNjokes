@@ -21,6 +21,7 @@
 
 .search-container {
   float: right;
+  width: 300px;
 }
 
 .search-bar {
@@ -31,6 +32,10 @@
 }
 
 .search-results {
+  width: 300px;
+  height: 500px;
+  align-self: right;
+  overflow: scroll;
   position: absolute;
   background-color: #ff7700;
   border: 2px solid black;
