@@ -26,7 +26,6 @@ export const fetchSearchedJokesError = (error) => {
 
 export const fetchJokes = (searchPhrase) => (dispatch) => {
   dispatch(fetchSearchedJokes());
-
   fetch(`${SEARCH_JOKES_QUERY}${searchPhrase}`)
     .then((response) => response.json())
     .then(

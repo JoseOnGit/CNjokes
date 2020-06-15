@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Card from '../molecules/Card';
 import JokesWrapper from '../atoms/JokesWrapper';
 import ContentWrapper from '../atoms/ContentWrapper';
@@ -21,59 +21,44 @@ import {
   getJokesLoading,
 } from '../../redux/categoryJokes/selectors';
 
-class CategoryJokes extends Component {
-  constructor() {
-    super();
+const CategoryJokes = () => {
+  const [countOfJokes, setCountOfJokes] = useState(1);
 
-    this.state = {
-      countOfJokes: 1,
-    };
-  }
+  const categories = useSelector(getCategories);
+  const selectedCategory = useSelector(getSelectedCategory);
+  const jokes = useSelector(getJokes);
+  const jokesAreLoading = useSelector(getJokesLoading);
+  const jokesError = useSelector(getJokesError);
 
-  componentDidMount() {
-    const { fetchCategories } = this.props;
-    fetchCategories();
-  }
+  const dispatch = useDispatch();
 
-  componentDidUpdate(prevProps, prevState) {
-    const { countOfJokes: prevCountOfJokes } = prevState || {};
-    const { selectedCategory: prevSelectedCategory } = prevProps || {};
+  useEffect(() => {
+    dispatch(fetchCategoriesFromAPI());
+  }, [dispatch]);
 
-    const { countOfJokes } = this.state;
-    const { fetchJokes, selectedCategory, setJokes } = this.props;
+  useEffect(() => {
+    setCountOfJokes(1);
+    dispatch(setJokes([]));
+    selectedCategory && dispatch(getJokesFromCategory(selectedCategory));
+  }, [selectedCategory, dispatch]);
 
-    const isCurrentCategorySame = prevSelectedCategory !== selectedCategory;
-    const isCurrentCountSame = prevCountOfJokes !== countOfJokes;
-    const isCountHigherThatOne = countOfJokes > 1;
+  useEffect(() => {
+    if (countOfJokes > 1) dispatch(getJokesFromCategory(selectedCategory));
+  }, [countOfJokes, dispatch]);
 
-    if (isCurrentCategorySame) {
-      this.setState({ countOfJokes: 1 });
-      setJokes([]);
-      fetchJokes(selectedCategory);
-    } else if (isCurrentCountSame && isCountHigherThatOne) {
-      fetchJokes(selectedCategory);
-    }
-  }
-
-  spliceJokes = () => {
-    const { responseData, countOfJokes } = this.state;
-
-    return responseData.splice(0, countOfJokes);
-  };
-
-  handleInputChanged = ({ target }) => {
+  const handleInputChanged = ({ target }) => {
     const { value } = target || {};
 
-    this.setState({ countOfJokes: value });
+    setCountOfJokes(value);
   };
 
-  handleDropdownChanged = ({ target }) => {
+  const handleDropdownChanged = ({ target }) => {
     const { value } = target || {};
 
-    this.props.setCategory(value);
+    dispatch(setCategory(value));
   };
 
-  removeDuplicates(originalArray) {
+  const removeDuplicates = (originalArray) => {
     // const filteredArray = [...new Set(originalArray)];
     // const filteredArray = originalArray.filter(
     //   (item, index) => originalArray.indexOf(item) === index,
@@ -88,11 +73,9 @@ class CategoryJokes extends Component {
           : filteredArray.push(x),
       );
     return filteredArray;
-  }
+  };
 
-  renderData = () => {
-    const { jokesError, jokesAreLoading, jokes } = this.props;
-
+  const renderData = () => {
     if (jokesError) {
       const { message } = jokesError;
       console.error(message);
@@ -103,7 +86,7 @@ class CategoryJokes extends Component {
       return <div>Loading...</div>;
     }
 
-    const filteredArray = this.removeDuplicates(jokes);
+    const filteredArray = removeDuplicates(jokes);
 
     return (
       <JokesWrapper>
@@ -113,41 +96,22 @@ class CategoryJokes extends Component {
     );
   };
 
-  render() {
-    const { countOfJokes } = this.state;
-
-    return (
-      <ContentWrapper>
-        <div>
-          <NumberSetter
-            count={countOfJokes}
-            onChangeHandler={this.handleInputChanged}
-          />
-          <Dropdown
-            selectedValue={this.props.selectedCategory}
-            onChangeHandler={this.handleDropdownChanged}
-            data={this.props.categories}
-          />
-        </div>
-        {this.renderData()}
-      </ContentWrapper>
-    );
-  }
-}
-
-const mapStateToProps = (state) => {
-  return {
-    categories: getCategories(state),
-    selectedCategory: getSelectedCategory(state),
-    jokes: getJokes(state),
-    jokesAreLoading: getJokesLoading(state),
-    jokesError: getJokesError(state),
-  };
+  return (
+    <ContentWrapper>
+      <div>
+        <NumberSetter
+          count={countOfJokes}
+          onChangeHandler={handleInputChanged}
+        />
+        <Dropdown
+          selectedValue={selectedCategory}
+          onChangeHandler={handleDropdownChanged}
+          data={categories}
+        />
+      </div>
+      {renderData()}
+    </ContentWrapper>
+  );
 };
 
-export default connect(mapStateToProps, {
-  fetchCategories: () => fetchCategoriesFromAPI(),
-  fetchJokes: (selectedCategory) => getJokesFromCategory(selectedCategory),
-  setCategory: (category) => setCategory(category),
-  setJokes: (jokes) => setJokes(jokes),
-})(CategoryJokes);
+export default CategoryJokes;

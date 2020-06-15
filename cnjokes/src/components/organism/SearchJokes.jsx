@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Card from '../molecules/Card';
 import ContentWrapper from '../atoms/ContentWrapper';
@@ -14,39 +14,27 @@ import {
   getJokesError,
 } from '../../redux/searchJokes/selectors';
 
-class SearchJokes extends Component {
-  constructor(props) {
-    super(props);
+const SearchJokes = () => {
+  const [searchPhrase, setSearchPhrase] = useState('');
 
-    this.state = {
-      searchPhrase: '',
-    };
-  }
+  const dispatch = useDispatch();
 
-  componentDidUpdate(prevProps, { searchPhrase }) {
-    const { searchPhrase: currentSearchPhrase } = this.state;
+  const jokes = useSelector(getJokes);
+  const isLoading = useSelector(getJokesLoading);
+  const error = useSelector(getJokesError);
 
-    if (
-      searchPhrase !== currentSearchPhrase &&
-      currentSearchPhrase.length >= 3
-    ) {
-      this.props.fetchJokes(currentSearchPhrase);
-    }
-  }
+  useEffect(() => {
+    if (searchPhrase.length >= 3) dispatch(fetchJokes(searchPhrase));
+  }, [searchPhrase, dispatch]);
 
-  handleInputChanged = ({ target }) => {
+  const handleInputChanged = ({ target }) => {
     const { value } = target;
-    this.setState({
-      searchPhrase: value,
-    });
+    setSearchPhrase(value);
   };
 
-  spliceJokes = (jokes) => jokes.splice(0, 25);
+  const spliceJokes = (jokes) => jokes.splice(0, 25);
 
-  renderData = () => {
-    const { searchPhrase } = this.state;
-    const { jokes, isLoading, error } = this.props;
-
+  const renderData = () => {
     if (error) {
       const { message } = error;
       console.error(message);
@@ -55,7 +43,7 @@ class SearchJokes extends Component {
 
     if (isLoading && searchPhrase.length >= 3) return <div>Loading...</div>;
 
-    const splicedJokes = this.spliceJokes(jokes);
+    const splicedJokes = spliceJokes(jokes);
 
     return (
       <JokesWrapper>
@@ -65,32 +53,18 @@ class SearchJokes extends Component {
     );
   };
 
-  render() {
-    const { searchPhrase } = this.state;
-
-    return (
-      <>
-        <h2 className="text">You can also search for a joke </h2>
-        <ContentWrapper>
-          <SearchInput
-            searchPhrase={searchPhrase}
-            onChangeHandler={this.handleInputChanged}
-          />
-          {this.renderData()}
-        </ContentWrapper>
-      </>
-    );
-  }
-}
-
-const mapStateToProps = (state) => {
-  return {
-    jokes: getJokes(state),
-    isLoading: getJokesLoading(state),
-    error: getJokesError(state),
-  };
+  return (
+    <>
+      <h2 className="text">You can also search for a joke </h2>
+      <ContentWrapper>
+        <SearchInput
+          searchPhrase={searchPhrase}
+          onChangeHandler={handleInputChanged}
+        />
+        {renderData()}
+      </ContentWrapper>
+    </>
+  );
 };
 
-export default connect(mapStateToProps, {
-  fetchJokes: (phrase) => fetchJokes(phrase),
-})(SearchJokes);
+export default SearchJokes;
