@@ -1,10 +1,9 @@
-.chuck-wrap {
-  width: 70%;
-  margin: auto;
+.joke-part {
+  width: 60%;
   text-align: center;
 }
 
-.chuck-wrap div {
+.joke-part div {
   margin: 2em auto;
 }
 
@@ -16,4 +15,16 @@
 
 .table {
   margin: auto;
+}
+
+.category-select {
+  width: 20%;
+}
+
+.counter-and-button {
+  width: 20%;
+}
+
+.joke-display-body {
+  display: flex;
 }

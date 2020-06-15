@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import JokeCategorySelect from '../components/JokeCategorySelect';
+import JokeCategorySelect from '../components/category_select/JokeCategorySelect';
 import JokeCounter from '../components/JokeCounter';
 import JokeList from '../components/JokeList';
 import {
@@ -12,7 +12,7 @@ import {
 function MainPage() {
   const [jokeList, setJokeList] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('Any');
+  const [selectedCategory, setSelectedCategory] = useState('');
   const [jokeCount, setJokeCount] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -23,13 +23,11 @@ function MainPage() {
       apiBaseGet(`${RANDOM_JOKE_QUERY}${categoryQuery}`);
 
     const getJoke = async () => {
-      return await callJokeApi()
-        .then((response) => response.json())
-        .then(({ value }) => value);
+      return await callJokeApi().then((response) => response.json());
     };
 
     const categoryQuery =
-      selectedCategory === 'Any' ? '' : `?category=${selectedCategory}`;
+      selectedCategory === '' ? '' : `?category=${selectedCategory}`;
 
     setIsLoading(true);
     const tempJokeList = Array.from(new Array(jokeCount), () => getJoke());
@@ -53,9 +51,8 @@ function MainPage() {
     getCategories();
   }, []);
 
-  const handleCategoryChange = (event) => {
-    const { value } = event.target || {};
-    setSelectedCategory(value);
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
   };
 
   const handleJokeCountChange = (event) => {
@@ -64,15 +61,25 @@ function MainPage() {
   };
 
   return (
-    <div className="chuck-wrap">
-      <div className="chuck-header" />
-      <JokeList jokeList={jokeList} isLoading={isLoading} />
-      <button onClick={getJokes}>Get a random joke</button>
-      <JokeCategorySelect
-        categories={categories}
-        handleCategoryChange={handleCategoryChange}
-      />
-      <JokeCounter handleJokeCountChange={handleJokeCountChange} />
+    <div className="joke-display-body">
+      <span className="category-select">
+        <JokeCategorySelect
+          categories={categories}
+          handleCategoryChange={handleCategoryChange}
+        />
+      </span>
+      <span className="joke-part">
+        <div className="chuck-header" />
+        <JokeList jokeList={jokeList} isLoading={isLoading} />
+      </span>
+      <span className="counter-and-button">
+        <div>
+          <JokeCounter handleJokeCountChange={handleJokeCountChange} />
+        </div>
+        <div>
+          <button onClick={getJokes}>Get a new jokes</button>
+        </div>
+      </span>
     </div>
   );
 }

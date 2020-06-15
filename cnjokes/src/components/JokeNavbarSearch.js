@@ -7,6 +7,7 @@ function JokeNavbarSearch() {
   const [searchedJokes, setSearchedJokes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchedString, setSearchedString] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
 
   const getSearchedJokes = (query) => {
     setIsLoading(true);
@@ -14,10 +15,9 @@ function JokeNavbarSearch() {
       .then((response) => response.json())
       .then((data) => {
         const result = data.result || [];
-        const results = result.splice(0, 25).map(({ value }) => {
-          console.log(value);
+        const results = result.splice(0, 25).map(({ value, id }) => {
           if (value.length > 25) {
-            return value.slice(0, 50) + '...';
+            return { value: value.slice(0, 50) + '...', id: id };
           } else return value;
         });
         setSearchedJokes(results);
@@ -34,7 +34,7 @@ function JokeNavbarSearch() {
   }, [searchedString]);
 
   const searchResultsList = () => {
-    if (searchedJokes.length > 0)
+    if (searchedJokes.length > 0 && isFocused)
       return (
         <div className="search-results">
           <JokeList
@@ -53,6 +53,8 @@ function JokeNavbarSearch() {
         type="text"
         onChange={(event) => setSearchedString(event.target.value)}
         placeholder="search jokes"
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
       />
       {searchResultsList()}
     </div>

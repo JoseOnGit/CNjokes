@@ -1,0 +1,14 @@
+.select-button.true {
+  background-color: rgb(255, 136, 0);
+}
+
+.select-button.false {
+  background-color: rgb(255, 102, 0);
+}
+
+.select-button {
+  width: 8em;
+  height: 2em;
+  font-size: 20px;
+  font-weight: bold;
+}
