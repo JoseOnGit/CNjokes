@@ -54,16 +54,14 @@ const SearchJokes = () => {
   };
 
   return (
-    <>
-      <h2 className="text">You can also search for a joke </h2>
-      <ContentWrapper>
-        <SearchInput
-          searchPhrase={searchPhrase}
-          onChangeHandler={handleInputChanged}
-        />
-        {renderData()}
-      </ContentWrapper>
-    </>
+    <div className="search-jokes-content">
+      <h2 className="text">Or search for a joke </h2>
+      <SearchInput
+        searchPhrase={searchPhrase}
+        onChangeHandler={handleInputChanged}
+      />
+      {renderData()}
+    </div>
   );
 };
 

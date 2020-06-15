@@ -1,3 +1,3 @@
-export const getJokes = (state) => state.search.searchedJokes;
-export const getJokesLoading = (state) => state.search.isLoading;
-export const getJokesError = (state) => state.search.error;
+export const getJokes = (state) => state.searchJokes.searchedJokes;
+export const getJokesLoading = (state) => state.searchJokes.isLoading;
+export const getJokesError = (state) => state.searchJokes.error;

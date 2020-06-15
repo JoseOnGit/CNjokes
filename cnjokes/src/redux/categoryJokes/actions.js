@@ -49,7 +49,8 @@ export const getCategories = () => (dispatch) => {
     .then((response) => response.json())
     .then(
       (data) => {
-        const responseDataCategories = store.getState().category.categories;
+        const responseDataCategories = store.getState().categoryJokes
+          .categories;
         const updatedResponseDataCategories = responseDataCategories.concat(
           data,
         );
@@ -103,7 +104,7 @@ export const getJokesFromCategory = (selectedCategory) => (dispatch) => {
     .then((response) => response.json())
     .then(
       (data) => {
-        const responseDataJokes = store.getState().category.jokes;
+        const responseDataJokes = store.getState().categoryJokes.jokes;
         const updatedJokes = [...responseDataJokes, data];
         dispatch(fetchJokesFromCategorySuccess(updatedJokes));
       },

@@ -1,11 +1,13 @@
 import { combineReducers } from 'redux';
 
-import searchReducer from './searchJokes/reducer';
-import categoryReducer from './categoryJokes/reducer';
+import searchJokesReducer from './searchJokes/reducer';
+import categoryJokesReducer from './categoryJokes/reducer';
+import randomJokeReducer from './randomJoke/reducer';
 
 const rootReducer = combineReducers({
-  search: searchReducer,
-  category: categoryReducer,
+  searchJokes: searchJokesReducer,
+  categoryJokes: categoryJokesReducer,
+  randomJokes: randomJokeReducer,
 });
 
 export default rootReducer;

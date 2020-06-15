@@ -3,18 +3,18 @@ import './app.css';
 
 import CategoryJokes from './components/organism/CategoryJokes';
 import SearchJokes from './components/organism/SearchJokes';
-// import RandomJokes from './components/organism/RandomJokes';
-// import GlobalJokesProvider from './context/Provider';
+import RandomJoke from './components/organism/RandomJoke';
 
 const App = () => (
   <div>
-    <header className="header">CN Jokes</header>
+    <header className="header">
+      <span className="header-item">Chuck Norris Jokes</span>
+      <span className="header-item">
+        <span className="CN">CN</span> University
+      </span>
+    </header>
     <div className="content">
-      <h1 className="text">Chuck Norris Jokes</h1>
-      <div className="chuckHeader" />
-      {/* <GlobalJokesProvider>
-            <RandomJokes />
-          </GlobalJokesProvider> */}
+      <RandomJoke />
       <CategoryJokes />
       <SearchJokes />
     </div>

@@ -98,6 +98,7 @@ const CategoryJokes = () => {
 
   return (
     <ContentWrapper>
+      <h2 className="text">You can choose from categories</h2>
       <div>
         <NumberSetter
           count={countOfJokes}
