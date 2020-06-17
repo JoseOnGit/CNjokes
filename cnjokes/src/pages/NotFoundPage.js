@@ -1,8 +1,8 @@
-import React from "react";
-import { Jumbotron } from "reactstrap";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Jumbotron } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
-function NotFoundPage() {
+const NotFoundPage = () => {
   return (
     <Jumbotron>
       <h1>Whoops!</h1>
@@ -15,6 +15,6 @@ function NotFoundPage() {
       </p>
     </Jumbotron>
   );
-}
+};
 
-export default NotFoundPage
+export default NotFoundPage;

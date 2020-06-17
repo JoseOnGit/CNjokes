@@ -3,15 +3,15 @@ import JokeNavbarSearch from '../JokeNavbarSearch';
 
 import './AppNavbar.css';
 
-function AppNavbar() {
+const AppNavbar = () => {
   return (
     <div className="topnav">
       <a className="navbar-brand" href="/">
         CNjokes
       </a>
-      <JokeNavbarSearch className="search-container" />
+      <JokeNavbarSearch />
     </div>
   );
-}
+};
 
 export default AppNavbar;

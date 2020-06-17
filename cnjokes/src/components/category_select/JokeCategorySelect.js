@@ -4,9 +4,7 @@ import SelectOption from './SelectOption';
 
 import './CategorySelect.css';
 
-function JokeCategorySelect(props) {
-  const { categories, handleCategoryChange } = props || {};
-
+const JokeCategorySelect = ({ categories, handleCategoryChange }) => {
   const [selected, setSelected] = useState('');
 
   const handleChange = (event) => {
@@ -17,19 +15,21 @@ function JokeCategorySelect(props) {
 
   useEffect(() => {
     handleCategoryChange(selected);
-  }, [selected]);
+  }, [selected, handleCategoryChange]);
 
   return (
     <>
       {categories.map((category) => {
-        let active = false;
-        if (selected === category) active = true;
+        const isActive = () => {
+          if (selected === category) return true;
+          else return false;
+        };
 
         return (
           <div key={category}>
             <SelectOption
               name={category}
-              selected={active}
+              selected={isActive()}
               handleChange={handleChange}
             />
           </div>
@@ -37,6 +37,6 @@ function JokeCategorySelect(props) {
       })}
     </>
   );
-}
+};
 
 export default JokeCategorySelect;

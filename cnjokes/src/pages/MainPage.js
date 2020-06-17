@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import JokeCategorySelect from '../components/category_select/JokeCategorySelect';
-import JokeCounter from '../components/JokeCounter';
+import JokeCounter from '../components/joke_counter/JokeCounter';
 import JokeList from '../components/JokeList';
 import {
   CHUCK_API,
@@ -9,7 +9,7 @@ import {
   CATEGORIES_QUERY,
 } from '../GlobalVariables';
 
-function MainPage() {
+const MainPage = () => {
   const [jokeList, setJokeList] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -18,7 +18,7 @@ function MainPage() {
 
   const apiBaseGet = (query) => fetch(`${CHUCK_API}${query}`);
 
-  const getJokes = async () => {
+  const getJokes = useCallback(() => {
     const callJokeApi = () =>
       apiBaseGet(`${RANDOM_JOKE_QUERY}${categoryQuery}`);
 
@@ -38,26 +38,25 @@ function MainPage() {
     };
 
     Promise.all(tempJokeList).then(fillJokeList);
-  };
+  }, [jokeCount, selectedCategory]);
 
-  const getCategories = () => {
+  const getCategories = useCallback(() => {
     apiBaseGet(CATEGORIES_QUERY)
       .then((response) => response.json())
       .then((data) => setCategories(data));
-  };
+  }, []);
 
   useEffect(() => {
     getJokes();
     getCategories();
-  }, []);
+  }, [getCategories, getJokes]);
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
   };
 
-  const handleJokeCountChange = (event) => {
-    const { value } = event.target || {};
-    setJokeCount(parseInt(value));
+  const handleJokeCountChange = (count) => {
+    setJokeCount(parseInt(count));
   };
 
   return (
@@ -73,15 +72,17 @@ function MainPage() {
         <JokeList jokeList={jokeList} isLoading={isLoading} />
       </span>
       <span className="counter-and-button">
-        <div>
+        <div className="joke-counter">
           <JokeCounter handleJokeCountChange={handleJokeCountChange} />
         </div>
         <div>
-          <button onClick={getJokes}>Get a new jokes</button>
+          <button className="get-jokes-button" onClick={getJokes}>
+            Get new jokes
+          </button>
         </div>
       </span>
     </div>
   );
-}
+};
 
 export default MainPage;

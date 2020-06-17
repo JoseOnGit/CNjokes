@@ -1,7 +1,6 @@
 import React from 'react';
 
-function SelectOption(props) {
-  const { name, selected, handleChange } = props || {};
+const SelectOption = ({ name, selected, handleChange }) => {
   return (
     <button
       className={`select-button ${selected}`}
@@ -12,6 +11,6 @@ function SelectOption(props) {
       {name}
     </button>
   );
-}
+};
 
 export default SelectOption;

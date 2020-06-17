@@ -3,28 +3,31 @@
 }
 
 .topnav {
+  display: flex;
+  justify-content: space-between;
   overflow: hidden;
-  background-color: #ff7700;
+  background-color: rgb(255, 136, 0);
+  position: sticky;
+  top: 0;
 }
 
 .navbar-brand {
-  float: left;
-  display: block;
+  width: 8em;
   color: black;
   text-align: center;
-  padding: 14px 16px;
+  padding: 15px 15px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 20px;
   background-color: black;
   color: white;
 }
 
 .search-container {
-  float: right;
   width: 300px;
 }
 
 .search-bar {
+  float: right;
   padding: 6px;
   margin-top: 8px;
   font-size: 17px;
@@ -32,11 +35,11 @@
 }
 
 .search-results {
+  margin-top: 56px;
   width: 300px;
   height: 500px;
-  align-self: right;
   overflow: scroll;
-  position: absolute;
-  background-color: #ff7700;
+  position: fixed;
+  background-color: rgb(255, 136, 0);
   border: 2px solid black;
 }
