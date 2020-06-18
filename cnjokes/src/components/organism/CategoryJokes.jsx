@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+
 import Card from '../molecules/Card';
 import JokesWrapper from '../atoms/JokesWrapper';
-import ContentWrapper from '../atoms/ContentWrapper';
+import Label from '../atoms/Label';
+import LabelsWrapper from '../atoms/LabelsWrapper';
+import JokesSettersWrapper from '../atoms/JokesSettersWrapper';
+import CategoryContentWrapper from '../atoms/CategoryContentWrapper';
+import InputsWrapper from '../atoms/InputsWrapper';
 import NumberSetter from '../molecules/NumberSetter';
 import Dropdown from '../molecules/Dropdown';
-
 import {
   getCategories as fetchCategoriesFromAPI,
   getJokesFromCategory,
   setCategory,
   setJokes,
 } from '../../redux/categoryJokes/actions';
-
 import {
   getCategories,
   getSelectedCategory,
@@ -59,20 +62,11 @@ const CategoryJokes = () => {
   };
 
   const removeDuplicates = (originalArray) => {
-    // const filteredArray = [...new Set(originalArray)];
-    // const filteredArray = originalArray.filter(
-    //   (item, index) => originalArray.indexOf(item) === index,
-    // );
-    // TODO: [ ...new  Set() ] // https://medium.com/dailyjs/how-to-remove-array-duplicates-in-es6-5daa8789641c
-    const filteredArray = [];
+    const uniqueArray = [
+      ...new Set(originalArray.map((object) => JSON.stringify(object))),
+    ].map((objectInString) => JSON.parse(objectInString));
 
-    originalArray &&
-      originalArray.map((x) =>
-        filteredArray.filter((a) => a.id === x.id).length > 0
-          ? null
-          : filteredArray.push(x),
-      );
-    return filteredArray;
+    return uniqueArray;
   };
 
   const renderData = () => {
@@ -82,6 +76,7 @@ const CategoryJokes = () => {
 
       return <div>Error: {message}</div>;
     }
+
     if (jokesAreLoading) {
       return <div>Loading...</div>;
     }
@@ -97,21 +92,27 @@ const CategoryJokes = () => {
   };
 
   return (
-    <ContentWrapper>
+    <CategoryContentWrapper>
       <h2 className="text">You can choose from categories</h2>
-      <div>
-        <NumberSetter
-          count={countOfJokes}
-          onChangeHandler={handleInputChanged}
-        />
-        <Dropdown
-          selectedValue={selectedCategory}
-          onChangeHandler={handleDropdownChanged}
-          data={categories}
-        />
-      </div>
+      <JokesSettersWrapper>
+        <LabelsWrapper>
+          <Label text="Number of jokes you would like to see: " />
+          <Label text="Choose category: " />
+        </LabelsWrapper>
+        <InputsWrapper>
+          <NumberSetter
+            count={countOfJokes}
+            onChangeHandler={handleInputChanged}
+          />
+          <Dropdown
+            selectedValue={selectedCategory}
+            onChangeHandler={handleDropdownChanged}
+            data={categories}
+          />
+        </InputsWrapper>
+      </JokesSettersWrapper>
       {renderData()}
-    </ContentWrapper>
+    </CategoryContentWrapper>
   );
 };
 

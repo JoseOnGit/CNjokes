@@ -1,19 +1,15 @@
 import React from 'react';
 import './app.css';
 
+import Header from './components/molecules/Header';
 import CategoryJokes from './components/organism/CategoryJokes';
 import SearchJokes from './components/organism/SearchJokes';
 import RandomJoke from './components/organism/RandomJoke';
 
 const App = () => (
   <div>
-    <header className="header">
-      <span className="header-item">Chuck Norris Jokes</span>
-      <span className="header-item">
-        <span className="CN">CN</span> University
-      </span>
-    </header>
-    <div className="content">
+    <Header />
+    <div className="content-wrapper">
       <RandomJoke />
       <CategoryJokes />
       <SearchJokes />

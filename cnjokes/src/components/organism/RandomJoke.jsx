@@ -3,8 +3,10 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { fetchJoke } from '../../redux/randomJoke/actions';
 
-import JokesWrapper from '../atoms/JokesWrapper';
-import ContentWrapper from '../atoms/ContentWrapper';
+import Button from '../atoms/Button';
+import RandomJokeWrapper from '../atoms/RandomJokeWrapper';
+import RandomJokeText from '../atoms/RandomJokeText';
+import RandomJokeContentWrapper from '../atoms/RandomJokeContentWrapper';
 
 import '../../app.css';
 
@@ -36,24 +38,24 @@ const RandomJoke = () => {
 
       return <div>Error: {message}</div>;
     }
+
     if (isLoading) {
       return <div>Loading...</div>;
     }
+
     return (
-      <div className="random-joke-wrapper">
-        <p className="random-joke-text">{joke && joke.value}</p>
-      </div>
+      <RandomJokeWrapper>
+        <RandomJokeText joke={joke && joke.value} />
+      </RandomJokeWrapper>
     );
   };
 
   return (
-    <div className="random-joke-content">
-      <h1 className="random-joke-title">Random Joke</h1>
+    <RandomJokeContentWrapper>
+      <h1 className="random-joke-title">Random Chuck Norris Joke</h1>
       {renderData()}
-      <button className="new-joke-button" onClick={() => onClickHandler()}>
-        New Joke!
-      </button>
-    </div>
+      <Button text="New Joke!" onClickHandler={() => onClickHandler()} />
+    </RandomJokeContentWrapper>
   );
 };
 

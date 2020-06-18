@@ -35,6 +35,7 @@
   width: 100%;
   min-height: 300px;
   background-color: rgba(119, 118, 118, 0.12);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.12);
 }
 
 .new-joke-button {
@@ -47,6 +48,7 @@
   margin: 10px auto 20px;
   padding: 5px 15px;
   background-color: red;
+  box-shadow: 5px 10px 10px rgba(117, 2, 2, 0.356);
   color: white;
 }
 
@@ -56,7 +58,14 @@
   font-family: 'Comic Sans MS', cursive, sans-serif;
 }
 
-.content {
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.block-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -99,14 +108,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0 0 50px;
   width: 100%;
   height: 100%;
   min-height: 300px;
   background-color: rgba(119, 118, 118, 0.12);
+  box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.12);
 }
 
 .search-input {
-  font-family: inherit;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
   border: 0;
   margin-bottom: 30px;
   border-bottom: 2px solid gray;
@@ -117,7 +128,39 @@
   transition: border-color 0.2s;
 }
 
-.dropdown {
+.count-input {
+  width: auto;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  border: 0;
+  border-bottom: 2px solid gray;
+  outline: 0;
+  font-size: 1rem;
+  background: transparent;
+  transition: border-color 0.2s;
+}
+
+select.dropdown {
+  width: 100% !important;
+  font-family: inherit;
+  border: 0;
+  border-bottom: 2px solid gray;
+  outline: 0;
+  font-size: 1rem;
+  background: transparent;
+  transition: border-color 0.2s;
+}
+
+.labels {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+}
+
+.jokes-setters {
+  display: flex;
+  flex-direction: row;
+  margin: 20px auto 30px;
+}
+
+.setters {
+  margin-left: 50px;
 }
