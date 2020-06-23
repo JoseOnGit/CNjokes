@@ -29,8 +29,6 @@ function NumberOfRandomJokeUniversal(props) {
             <div className="container">
                 {randomJokes.map(
                     (joke, index) => {
-                        console.log('%c⧭ render randomJokes ', 'color: #917399', randomJokes);
-                        console.log('%c⧭render map  joke ', 'color: #e50000',index + ' ' +  joke);
                         return <Joke text={joke} key={index} />
                     }
                 )}
