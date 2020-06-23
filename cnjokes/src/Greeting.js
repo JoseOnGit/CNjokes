@@ -1,14 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class Greeting extends Component {
-  render() {
-
+function Greeting(props) {
     return (
       <div>
-        Hello {this.props.name}!
+        Hello {props.name}!
       </div>
     );
-  }
 }
-
 export default Greeting;
