@@ -6,6 +6,7 @@ import NumberOfRandomJokeUniversal from './NumberOfRandomJokeUniversal';
 function App() {
   return (
     <div className="App">
+      <NumberOfRandomJokeClassUniversal doesHaveNumber="true" doesHaveCategories="true" />
       <NumberOfRandomJokeUniversal doesHaveNumber="true" doesHaveCategories="true" />
     </div>
   );

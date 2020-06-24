@@ -1,46 +1,51 @@
 import React, { useState, useEffect } from 'react';
-import Joke from './common/Joke';
+import RenderJokes from './RenderJokes';
 import Button from './common/Button';
 import NumberInput from './common/NumberInput'
 
 function NumberOfRandomJokeUniversal(props) {
-    const [randomJokes, setRandomJokes] = useState([]);
+    const [randomJoke, setRandomJoke] = useState([]);
     const [amountOfRandomJokes, setAmountOfRandomJokes] = useState(1);
 
+    useEffect(() => {
+        const input = document.querySelector('.number-input');
+        console.log('%c⧭ input.value ', 'color: #bfffc8', input.value);
+        setAmountOfRandomJokes(parseInt(input.value));
+    },[amountOfRandomJokes])
+
+
     function handle() {
-        let allJokes = [];
+        let all = [];
         for(let i=0; i<amountOfRandomJokes; i++) {
-            fetchJoke(allJokes);
+            fetchJoke(all);
         }
+        console.log('%c⧭ handle: all ', 'color: #e57373', all);
     }
     
-    function fetchJoke(allJokes) {
+    function fetchJoke(all) {
         fetch('https://api.chucknorris.io/jokes/random')
             .then(response => response.json())
-            .then(data => {
-                allJokes.push(data.value);
-                console.log('%c⧭ data ', 'color: #00bf00', data);
-                console.log('%c⧭ allJokes  ', 'color: #00a3cc', allJokes);
-                setRandomJokes(allJokes);
-            });
+            .then(
+                (data) => {
+                    all.push(data.value);
+                    setRandomJoke(all);
+                }
+            );
     }
+
+
+    const esSuffix = amountOfRandomJokes === 1 ? '' : 's';  
+    const buttonText = 'Get ' + amountOfRandomJokes + ' random joke' + esSuffix;
+
     return (
         <div className="random-joke-box">
-            <div className="container">
-                {randomJokes.map(
-                    (joke, index) => {
-                        return <Joke text={joke} key={index} />
-                    }
-                )}
-            </div>
-
+            <RenderJokes jokesArray={randomJoke} />
             <NumberInput 
                 value={amountOfRandomJokes} 
                 onChange={(passedValue) => setAmountOfRandomJokes(parseInt(passedValue))}
             />
-
             <Button 
-                text='Buttonis' 
+                text={buttonText} 
                 handleClick={() => handle()} 
             />
         </div>       
