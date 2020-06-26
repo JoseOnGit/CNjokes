@@ -1,8 +1,8 @@
 import React from 'react';
 
-function Joke(props) {
+function Joke(props) { 
     return (
-        <div className="joke">{props.text}</div>
+        <div className="joke"><span>{props.text}</span></div>
     )
 }
 export default Joke;

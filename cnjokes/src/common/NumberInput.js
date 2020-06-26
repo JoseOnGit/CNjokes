@@ -1,19 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-class NumberInput extends React.Component {
-    static propTypes = {
-        value: PropTypes.number,
-        onChange: PropTypes.func,
+function NumberInput(props) {
+    const handleThisChange = (event) => {
+        props.onChange(event.target.value);
     }
-    handleThisChange = (event) => {
-        this.props.onChange(event.target.value);
-    }
-    render() {
-        return (
-            <input type="number" value={this.props.value} className="number-input" onChange={this.handleThisChange} />
-        )
-
-    }
+    return (
+        <input type="number" className="number-input" value={props.value} onChange={handleThisChange} />
+    )
 }
 export default NumberInput;

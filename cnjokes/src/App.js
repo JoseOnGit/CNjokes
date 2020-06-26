@@ -1,13 +1,17 @@
 import React from 'react';
 import './App.css';
-import NumberOfRandomJokeClassUniversal from './NumberOfRandomJokeClassUniversal';
-import NumberOfRandomJokeUniversal from './NumberOfRandomJokeUniversal';
+import NumberOfRandomJokeUniversal from './NumberOfRandomJokeUniversal'; 
+import RandomJokeModule from './RandomJokeModule'
 
 function App() {
   return (
     <div className="App">
-      <NumberOfRandomJokeClassUniversal doesHaveNumber="true" doesHaveCategories="true" />
-      <NumberOfRandomJokeUniversal doesHaveNumber="true" doesHaveCategories="true" />
+      <RandomJokeModule />
+      <NumberOfRandomJokeUniversal 
+        doesHaveNumber="true" 
+        doesHaveCategories="true" 
+        doesHaveTitle="Get some more Chuck jokes... search or choose a category:" 
+        doesHaveSearch = "true" />
     </div>
   );
 }

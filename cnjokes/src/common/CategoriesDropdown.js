@@ -1,44 +1,27 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react';
 
-class CategoriesDropdown extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: PropTypes.number,
-            onChange: PropTypes.func,
-            optionList: [],
-        }
+function CategoriesDropdown(props) {
+    const [optionList, setOptionList] = useState([]);
+    
+    useEffect(() => {
+        fetch('https://api.chucknorris.io/jokes/categories')
+        .then(response => response.json())
+        .then(data => {
+            setOptionList([...data]);
+        });
+    },[])
+    
+    const handleThisChange = (event) => {
+        props.onChange(event.target.value);
     }
-    componentDidMount() {
-        this.fetchCategories();
-    }
-    fetchCategories() {
-        const endpoint = 'https://api.chucknorris.io/jokes/categories';
-        fetch(endpoint)
-            .then(response => response.json())
-            .then(data => {
-                const allCategories = this.state.optionList;
-                allCategories.push(...data);
-                this.setState({
-                    optionList: allCategories,
-                })
-            });
-    }
-    handleThisChange = (event) => {
-        this.props.onChange(event.target.value);
-    }
-    render() {
-        const list = this.state.optionList.map(
-            (category, index) => <option key={index} value={category}>{category}</option>
-        );
-        return (
-            <select className="category-select" onChange={this.handleThisChange}>
-                <option value="random">random</option>
-                {list}
-            </select>
-        )
-
-    }
+    
+    return (
+        <select className="category-select" onChange={handleThisChange}>
+            <option value="random">random</option>
+            {optionList.map(
+                (category, index) => <option value={category} key={index}>{category}</option>
+            )}
+        </select>
+    )
 }
 export default CategoriesDropdown;
