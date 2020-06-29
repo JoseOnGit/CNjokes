@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function CategoriesDropdown(props) {
+const CategoriesDropdown = (props) => {
     const [optionList, setOptionList] = useState([]);
     
     useEffect(() => {

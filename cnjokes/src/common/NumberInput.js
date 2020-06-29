@@ -1,11 +1,11 @@
 import React from 'react';
 
-function NumberInput(props) {
+const NumberInput = ({onChange, value}) => {
     const handleThisChange = (event) => {
-        props.onChange(event.target.value);
+        onChange(event.target.value);
     }
     return (
-        <input type="number" className="number-input" value={props.value} onChange={handleThisChange} />
+        <input type="number" className="number-input" value={value} onChange={handleThisChange} />
     )
 }
 export default NumberInput;

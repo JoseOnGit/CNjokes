@@ -1,15 +1,9 @@
 import React from 'react';
 
-function SearchJokes(props) {
-
+const SearchJokes = ({onChange}) => {
   const handleSearchedInput = async (event) => {
-    props.onChange(event.target.value);
+    onChange(event.target.value);
   }
-
-  return (
-    <div>
-      <input type="text" className="search" placeholder="Search" onChange={handleSearchedInput} />
-    </div>
-  )
+  return <input type="text" className="search" placeholder="Search" onChange={handleSearchedInput} />;
 }
 export default SearchJokes;

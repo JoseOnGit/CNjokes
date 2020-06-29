@@ -1,9 +1,8 @@
-
 const fetchJoke = async (category) => {
-    const path = category === "random" ? '' : '?category=' + category;
-    return fetch('https://api.chucknorris.io/jokes/random' + path)
-        .then(response => response.json())
-        .then(data => data.value);
+    const path = category === "random" ? '' : `?category=${category}`;
+    return await fetch(`https://api.chucknorris.io/jokes/random${path}`)
+        .then((response) => response.json())
+        .then(({value}) =>  value);
 }
 
 const getRandomJokes = async (amountOfRandomJokes,category) => {
@@ -16,6 +15,5 @@ const getRandomJokes = async (amountOfRandomJokes,category) => {
         all = [...all, currentJoke];
     }
     return all;
-};
-
+}
 export default getRandomJokes;

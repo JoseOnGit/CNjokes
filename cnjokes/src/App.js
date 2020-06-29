@@ -8,10 +8,10 @@ function App() {
     <div className="App">
       <RandomJokeModule />
       <NumberOfRandomJokeUniversal 
-        doesHaveNumber="true" 
-        doesHaveCategories="true" 
+        doesHaveNumber
+        doesHaveCategories
         doesHaveTitle="Get some more Chuck jokes... search or choose a category:" 
-        doesHaveSearch = "true" />
+        doesHaveSearch />
     </div>
   );
 }

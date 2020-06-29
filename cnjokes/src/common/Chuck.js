@@ -1,8 +1,4 @@
 import React from 'react';
 
-function Chuck() { 
-    return (
-        <div className="chuck"></div>
-    )
-}
+const Chuck = () => <div className="chuck" />
 export default Chuck;

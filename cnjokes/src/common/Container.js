@@ -1,11 +1,7 @@
 import React from 'react';
 
-function Container(props) {
-  const classes = props.className ? ' ' + props.className : '';
-  return (
-    <div className={"container" + classes}>
-      {props.children}
+const Container = ({className, children}) => 
+    <div className={`container ${className ? className : ''}`}>
+      {children}
     </div>
-  )
-}
 export default Container;

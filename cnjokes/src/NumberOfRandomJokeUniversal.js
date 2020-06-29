@@ -15,9 +15,11 @@ function NumberOfRandomJokeUniversal(props) {
     const [amountOfRandomJokes, setAmountOfRandomJokes] = useState(1);
     const [category, setCategory] = useState('random');
 
+    const {doesHaveTitle, doesHaveSearch, doesHaveCategories, doesHaveNumber} = props;
+
     // get joke on first render
     useEffect(() => {
-        if(!props.doesHaveCategories && !props.doesHaveNumber) {
+        if(!doesHaveCategories && !doesHaveNumber) {
             buttonHandler();
         }
     }, [])
@@ -37,23 +39,22 @@ function NumberOfRandomJokeUniversal(props) {
     }
 
     const handleSearch = async (passedValue) => {
-        const jokes = fetchSearchedJokes(passedValue);
-        setRandomJokes(await jokes);
+        const jokes = await fetchSearchedJokes(passedValue);
+        setRandomJokes( jokes);
     }
 
     // set dynamic button-text
-    const esSuffix = amountOfRandomJokes === 1 ? '' : 's';
-    const buttonText = 'Get ' + amountOfRandomJokes + ' ' + category + ' joke' + esSuffix;
+    const buttonText = `Get ${amountOfRandomJokes} ${category} joke${amountOfRandomJokes === 1 ? '' : 's'}`;
 
     return (
         <Container>
-            {props.doesHaveTitle &&
-                <div className="title">{props.doesHaveTitle}</div>}
-            {props.doesHaveSearch === "true" &&
+            {doesHaveTitle &&
+                <div className="title">{doesHaveTitle}</div>}
+            {doesHaveSearch &&
                 <SearchJokes onChange={handleSearch} />}
-            {props.doesHaveCategories === "true" &&
+            {doesHaveCategories &&
                 <CategoriesDropdown onChange={selectCategory} />}
-            {props.doesHaveNumber === "true" &&
+            {doesHaveNumber &&
                 <NumberInput value={amountOfRandomJokes} onChange={selectNumberOfJokes} />}
             <Button text={buttonText} handleClick={buttonHandler} />
             <RenderJokes jokes={randomJokes} />

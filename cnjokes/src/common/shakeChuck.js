@@ -1,5 +1,4 @@
-
-function shakeChuck() {
+const shakeChuck = () => {
   const chuck = document.querySelector('.chuck');
   chuck.classList.add('animate__animated', 'animate__tada', 'animate__fast');
   setTimeout(() => {
